@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,17 +12,23 @@
         h1 { color: #58a6ff; margin-top: 0; margin-bottom: 10px; }
         h2 { color: #58a6ff; font-size: 20px; margin-top: 0; border-bottom: 1px solid #30363d; padding-bottom: 10px; text-align: left; }
         p { line-height: 1.6; color: #8b949e; margin-bottom: 15px; font-size: 14px; }
-        .btn { display: inline-block; background-color: #238636; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 14px; }
+        .btn { display: inline-block; background-color: #238636; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 14px; cursor: pointer; border: none; }
         .btn-primary { background-color: #2563eb; }
-        .section-box { background: #111827; border: 1px solid #1f2937; border-radius: 8px; padding: 20px; text-align: left; }
-        .grid { display: grid; grid-template-columns: 1fr; gap: 15px; text-align: left; }
+        .btn-action { background-color: #da3633; width: 100%; margin-top: 10px; }
+        .box { background: #111827; border: 1px solid #1f2937; border-radius: 8px; padding: 20px; text-align: left; }
         ul { padding-left: 20px; color: #9ca3af; font-size: 13px; line-height: 1.6; margin: 0; }
         li { margin-bottom: 8px; }
+        .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .stat-item { background: #161b22; border: 1px solid #30363d; padding: 10px; border-radius: 6px; text-align: center; }
+        .stat-item span { display: block; font-size: 18px; font-weight: bold; color: #58a6ff; margin-top: 5px; }
+        .terminal { background: #010409; border: 1px solid #30363d; border-radius: 6px; padding: 12px; height: 130px; overflow-y: auto; font-family: monospace; font-size: 12px; color: #39d353; text-align: left; }
+        .log { margin-bottom: 4px; }
+        .err { color: #f85149; }
+        .ok { color: #58a6ff; }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Main Intro Card -->
         <div class="card">
             <h1>Solana Shield (SSH)</h1>
             <p>A decentralized security, liquidity protection, and anti-bot protocol built for the Solana ecosystem.</p>
@@ -29,8 +36,31 @@
             <a href="https://github.com/solanashield/solana-shield" class="btn">GitHub Repository</a>
         </div>
 
-        <!-- Plan 2: Enterprise Services & Security Auditing -->
-        <div class="section-box">
+        <div class="box" style="border-color: #2563eb;">
+            <h2>Live Demo</h2>
+            <p style="color: #9ca3af; font-size: 13px;">
+                Test the defense mechanism against sniper and MEV bot attacks during token launches.
+            </p>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    Blocked Bots
+                    <span id="bCount">0</span>
+                </div>
+                <div class="stat-item">
+                    Protected Pool
+                    <span id="pPool">$0</span>
+                </div>
+            </div>
+
+            <div class="terminal" id="term">
+                <div class="log">> Ready. Click below to test launch simulation...</div>
+            </div>
+
+            <button class="btn btn-action" onclick="runSim()">Run Test Attack</button>
+        </div>
+
+        <div class="box">
             <h2>Enterprise Partnership & Security Auditing</h2>
             <p style="color: #9ca3af; font-size: 13px;">
                 As the Solana Shield ($SSH) infrastructure, we provide high-budget smart contract security, anti-bot protection, and liquidity pool (LP) auditing services. We deliver enterprise solutions to protect your projects from cyber threats.
@@ -38,8 +68,7 @@
             <a href="mailto:solanashieldio@gmail.com" class="btn btn-primary" style="font-size: 13px; padding: 8px 16px;">Get in Touch</a>
         </div>
 
-        <!-- Services & Solutions -->
-        <div class="section-box">
+        <div class="box">
             <h2>Our Services</h2>
             <ul>
                 <li><b>Liquidity Pool Auditing:</b> Scanning and securing pool lock mechanisms and smart contract vulnerabilities.</li>
@@ -48,8 +77,7 @@
             </ul>
         </div>
 
-        <!-- Tokenomics Summary -->
-        <div class="section-box">
+        <div class="box">
             <h2>Tokenomics ($SSH)</h2>
             <ul>
                 <li><b>Ecosystem & Security Fund:</b> Structure dedicated to financing the liquidity pool shield and protocol security.</li>
@@ -57,8 +85,7 @@
             </ul>
         </div>
 
-        <!-- Roadmap -->
-        <div class="section-box">
+        <div class="box">
             <h2>Roadmap</h2>
             <ul>
                 <li><b>Phase 1:</b> Infrastructure design, open-source code architecture, and GitHub Pages deployment.</li>
@@ -67,5 +94,42 @@
             </ul>
         </div>
     </div>
+
+    <script>
+        function runSim() {
+            const term = document.getElementById('term');
+            const bCount = document.getElementById('bCount');
+            const pPool = document.getElementById('pPool');
+            
+            term.innerHTML = '<div class="log">> Launch started. Monitoring mempool...</div>';
+            
+            let b = 0;
+            let p = 0;
+            let s = 0;
+
+            const t = setInterval(() => {
+                s++;
+                if (s === 1) {
+                    term.innerHTML += '<div class="log err">[ALERT] 42 Sniper bots detected on block #258941!</div>';
+                    b += 42;
+                    p += 18500;
+                } else if (s === 2) {
+                    term.innerHTML += '<div class="log ok">[SHIELD] Filter active. 42 bot wallets blacklisted.</div>';
+                    term.innerHTML += '<div class="log err">[ALERT] 115 MEV sandwich bots trying to drain liquidity!</div>';
+                    b += 115;
+                    p += 54000;
+                } else if (s === 3) {
+                    term.innerHTML += '<div class="log ok">[SHIELD] MEV txns blocked. Real user orders routed safely.</div>';
+                    term.innerHTML += '<div class="log ok">[SUCCESS] Launch secured with zero manipulation.</div>';
+                    p += 75000;
+                    clearInterval(t);
+                }
+                
+                bCount.innerText = b;
+                pPool.innerText = '$' + p.toLocaleString();
+                term.scrollTop = term.scrollHeight;
+            }, 800);
+        }
+    </script>
 </body>
 </html>
